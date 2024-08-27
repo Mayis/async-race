@@ -8,6 +8,7 @@ interface Props {
   icon?: IconName;
   iconSize?: number;
 }
+
 function Button({ onClick, style, children, icon, iconSize }: PropsWithChildren<Props>) {
   return (
     <button onClick={onClick} style={style} className="py-2 px-3 border border-black rounded-md bg-white hover:bg-gray-100">
