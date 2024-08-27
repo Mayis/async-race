@@ -8,12 +8,7 @@ interface Props {
   width?: number;
   height?: number;
 }
-function Icon({
-  name,
-  width: widthFromProps,
-  height: heightFromProps,
-  size = 24,
-}: Props) {
+function Icon({ name, width: widthFromProps, height: heightFromProps, size = 24 }: Props) {
   const width = widthFromProps || size;
   const height = heightFromProps || size;
 
