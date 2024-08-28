@@ -9,14 +9,14 @@ interface Props {
 
 function GarageActions({ id, children }: PropsWithChildren<Props>) {
   return (
-    <div className="flex flex-row space-x-4 items-center">
+    <div className="flex flex-row space-x-4 items-center w-full">
       <div>
         <CarActions id={id} />
       </div>
       <div>
         <RaceActions id={id} />
       </div>
-      <div>{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 }

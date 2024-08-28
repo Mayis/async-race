@@ -2,6 +2,7 @@ import { EngineStatus } from "@/api/slices/engine/types";
 
 const DEFAULT_VELOCITY = 0;
 const DEFAULT_DISTANCE = 0;
+
 export class EngineResponse {
   velocity: number;
   distance: number;

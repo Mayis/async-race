@@ -1,5 +1,5 @@
 import { useCarsResponse } from "@/features/garage/hooks/use-cars-response.hook";
-import useGarageStore from "@/features/garage/store/use-garage-store";
+import useGarageStore from "@/features/store/use-garage-store";
 import { useCallback, useEffect, useState } from "react";
 
 export default function useCars() {
@@ -7,6 +7,7 @@ export default function useCars() {
     cars: state.cars,
     setCars: state.setCars
   }));
+  const [hasInitializedStore, setHasInitializedStore] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -31,10 +32,13 @@ export default function useCars() {
   }, [getCarsResponse, setCars]);
 
   useEffect(() => {
-    if (!cars.length) {
+    if (!hasInitializedStore && typeof window !== "undefined") {
+      setHasInitializedStore(true);
+    }
+    if (hasInitializedStore && !cars.length) {
       getCars();
     }
-  }, [getCars, cars]);
+  }, [getCars, cars, hasInitializedStore]);
 
   return {
     cars,

@@ -33,11 +33,11 @@ export default class WinnersSlice extends ApiSlice {
     return result;
   }
 
-  static async CreateWinner({ id, wins, time }: Winner) {
+  static async CreateWinner({ wins, time }: { wins: number; time: number }) {
     const rsp = await this.request(
       "",
       "POST",
-      { id, wins, time },
+      { wins, time },
       {
         headers: {
           contentType: "application/json"
