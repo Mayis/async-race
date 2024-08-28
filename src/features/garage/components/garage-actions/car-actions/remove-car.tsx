@@ -10,7 +10,7 @@ interface Props {
 }
 function RemoveCar({ id, onClose }: Props) {
   const { removeCarAction } = useManageGarageActions();
-  const car = useGarageStore(state => state.cars.find(car => car.id === id));
+  const car = useGarageStore(state => state.getCar(id));
 
   const handleRemoveCar = useCallback(async () => {
     await removeCarAction({ id });

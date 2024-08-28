@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void;
 }
 function UpdateCar({ id, onClose }: Props) {
-  const car = useGarageStore(state => state.cars.find(car => car.id === id));
+  const car = useGarageStore(state => state.getCar(id));
   const { updateCarAction, loading } = useManageGarageActions();
   const [updateValues, setUpdateValues] = useState({
     name: car?.name,

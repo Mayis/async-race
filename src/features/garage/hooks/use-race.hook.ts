@@ -5,8 +5,9 @@ import { useCallback } from "react";
 
 export default function useRace() {
   const { cars } = useGarageStore(state => ({
-    cars: state.cars
+    cars: state.cars[state.activePage]
   }));
+
   const { updateCarEngine } = useEngineActions();
 
   const handleAllCarsEngineActions = useCallback(async () => {

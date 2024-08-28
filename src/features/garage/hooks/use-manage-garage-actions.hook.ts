@@ -1,16 +1,17 @@
+import useCars from "@/features/garage/hooks/use-cars.hook";
 import useGarageActions from "@/features/garage/hooks/use-garage-actions";
 import useGarageStore from "@/features/store/use-garage-store";
 import { useState } from "react";
 
 export default function useManageGarageActions() {
-  const { createCar, removeCar, updateCar } = useGarageStore(state => ({
-    createCar: state.createCar,
+  const { removeCar, updateCar } = useGarageStore(state => ({
     removeCar: state.removeCar,
     updateCar: state.updateCar
   }));
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { createCar: createCarRsp, deleteCar: removeCarRsp, updateCar: updateCarRsp } = useGarageActions();
+  const { reloadOnCreate } = useCars();
 
   const createCarAction = async ({ name, color }: { name: string; color: string }) => {
     const rsp = await createCarRsp({
@@ -29,7 +30,7 @@ export default function useManageGarageActions() {
       setError(rsp.error);
       return;
     }
-    createCar(rsp.data!);
+    reloadOnCreate();
   };
 
   const removeCarAction = async ({ id }: { id: number }) => {

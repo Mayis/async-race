@@ -14,13 +14,21 @@ function RaceActions({ id }: Props) {
     setRaceType: state.setRaceType
   }));
   const raceStart = useCallback(
-    async ({ type, status }: { type: RaceType | null; status: EngineStatus.started | EngineStatus.stopped }) => {
+    async ({
+      type,
+      status,
+      reset
+    }: {
+      type: RaceType | null;
+      status: EngineStatus.started | EngineStatus.stopped;
+      reset: boolean;
+    }) => {
       setRaceType(type);
 
       await updateCarEngine({
         id,
         status,
-        reset: false
+        reset
       });
     },
     [id, setRaceType, updateCarEngine]
@@ -34,7 +42,8 @@ function RaceActions({ id }: Props) {
         onClick={() =>
           raceStart({
             type: "single",
-            status: EngineStatus.started
+            status: EngineStatus.started,
+            reset: false
           })
         }
       />
@@ -44,7 +53,8 @@ function RaceActions({ id }: Props) {
         onClick={() =>
           raceStart({
             type: null,
-            status: EngineStatus.stopped
+            status: EngineStatus.stopped,
+            reset: true
           })
         }
       />

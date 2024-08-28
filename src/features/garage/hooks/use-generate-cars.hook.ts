@@ -5,10 +5,15 @@ export default function useGenerateCars() {
   const cars = generateRandomCars();
 
   const { createCar } = useGarageActions();
-
   const generateCars = useCallback(async () => {
-    const actions = cars.map(async car => await createCar(car));
+    const actions = cars.map(car =>
+      createCar({
+        name: car.name,
+        color: car.color
+      })
+    );
     await Promise.all(actions);
+    // console.log(data);
   }, [cars, createCar]);
 
   return { generateCars };

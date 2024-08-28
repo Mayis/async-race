@@ -5,49 +5,77 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface GarageStoreState {
-  cars: Car[];
+  cars: Record<string, Car[]>;
+  activePage: number;
 }
 
 interface GarageStoreAction {
-  setCars: (cars: Car[]) => void;
+  setActivePage: (page: number) => void;
+  setCars: (cars: Record<string, Car[]>) => void;
   removeCar: (id: number) => void;
   updateCar: ({ id, car }: { id: number; car: Partial<Car> }) => void;
-  createCar: (car: Car) => void;
   updateCarEngine: (params: { id: number; engine: EngineResponse }) => void;
   updateCarStatus: (params: { id: number; status: EngineStatus }) => void;
   resetCars: () => void;
+  getCar: (id: number) => Car | undefined;
 }
 
 const useGarageStore = create<GarageStoreState & GarageStoreAction>()(
   persist(
-    set => ({
-      cars: [],
+    (set, get) => ({
+      activePage: 1,
+      cars: { "1": [] },
       setCars(cars) {
         set(() => ({ cars }));
       },
       removeCar(id) {
-        set(state => ({ cars: state.cars.filter(car => car.id !== id) }));
+        set(state => ({
+          cars: {
+            ...state.cars,
+            [state.activePage]: state.cars[state.activePage].filter(c => c.id !== id)
+          }
+        }));
       },
       updateCar({ id, car }) {
         set(state => ({
-          cars: state.cars.map(c => (c.id === id ? { ...c, ...car } : c))
+          cars: {
+            ...state.cars,
+            [state.activePage]: state.cars[state.activePage].map(c => (c.id === id ? { ...c, ...car } : c))
+          }
         }));
       },
-      createCar(car) {
-        set(state => ({ cars: [...state.cars, car] }));
-      },
+
       updateCarEngine({ id, engine }) {
         set(state => ({
-          cars: state.cars.map(c => (c.id === id ? { ...c, engine } : c))
+          cars: {
+            ...state.cars,
+            [state.activePage]: state.cars[state.activePage].map(c => (c.id === id ? { ...c, engine } : c))
+          }
         }));
       },
       updateCarStatus({ id, status }) {
         set(state => ({
-          cars: state.cars.map(c => (c.id === id ? { ...c, engine: { ...c.engine, status } } : c))
+          cars: {
+            ...state.cars,
+            [state.activePage]: state.cars[state.activePage].map(c =>
+              c.id === id ? { ...c, engine: { ...c.engine, status } } : c
+            )
+          }
         }));
       },
       resetCars() {
-        set(() => ({ cars: [] }));
+        set(state => ({
+          cars: {
+            ...state.cars,
+            [state.activePage]: []
+          }
+        }));
+      },
+      setActivePage(page) {
+        set(() => ({ activePage: page }));
+      },
+      getCar(id) {
+        return get().cars[get().activePage].find(car => car.id === id);
       }
     }),
     {

@@ -6,7 +6,7 @@ import { useCallback } from "react";
 
 export default function useResetCars() {
   const { cars, resetCarsInStore } = useGarageStore(state => ({
-    cars: state.cars,
+    cars: state.cars[state.activePage],
     resetCarsInStore: state.resetCars
   }));
   const { raceWinnerId, setRaceWinnerId } = useWinnerStore(state => ({
@@ -17,8 +17,8 @@ export default function useResetCars() {
 
   const resetCars = useCallback(async () => {
     const actions = cars.map(car => updateCarEngine({ id: car.id, status: EngineStatus.stopped }));
-    await Promise.all(actions);
     resetCarsInStore();
+    await Promise.all(actions);
     if (raceWinnerId) {
       setRaceWinnerId(null);
     }

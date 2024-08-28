@@ -17,7 +17,7 @@ function RaceControlPanel() {
     raceType: state.raceType
   }));
   const { canReset } = useGarageStore(state => ({
-    canReset: state.cars.length > 0 && state.cars.some(car => car.position === 0)
+    canReset: state.cars[state.activePage].some(car => car.position === 0)
   }));
   const startRace = useCallback(async () => {
     setRaceType("multi");

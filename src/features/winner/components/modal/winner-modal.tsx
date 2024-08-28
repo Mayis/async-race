@@ -13,7 +13,7 @@ function WinnerModal({ id, onClose }: Props) {
   }));
 
   const { car } = useGarageStore(state => ({
-    car: state.cars.find(car => car.id === id)
+    car: state.getCar(id)
   }));
 
   return (
