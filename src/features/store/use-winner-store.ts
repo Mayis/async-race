@@ -2,15 +2,15 @@ import { Winner } from "@/api/slices/winners/entity";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type RaceType = "single" | "multi";
+export type RaceType = "single" | "multi";
 
 interface WinnerWithCarId extends Winner {
   carId: number;
 }
 interface WinnerStore {
   winners: WinnerWithCarId[];
-  raceHasWinner: boolean;
-  raceType: RaceType;
+  raceWinnerId: number | null;
+  raceType: RaceType | null;
 }
 
 interface WinnerStoreAction {
@@ -18,8 +18,8 @@ interface WinnerStoreAction {
   createWinner: (winner: WinnerWithCarId) => void;
   updateWinner: ({ id, winner }: { id: number; winner: Partial<Winner> }) => void;
   removeWinner: (id: number) => void;
-  setRaceHasWinner: (raceHasWinner: boolean) => void;
-  setRaceType: (raceType: RaceType) => void;
+  setRaceWinnerId: (id: number | null) => void;
+  setRaceType: (raceType: RaceType | null) => void;
   getWinner: (id: number) => WinnerWithCarId | undefined;
 }
 
@@ -27,8 +27,8 @@ const useWinnerStore = create<WinnerStore & WinnerStoreAction>()(
   persist(
     (set, get) => ({
       winners: [],
-      raceHasWinner: false,
-      raceType: "single",
+      raceWinnerId: null,
+      raceType: null,
       setWinners(winners) {
         set(() => ({ winners }));
       },
@@ -48,8 +48,8 @@ const useWinnerStore = create<WinnerStore & WinnerStoreAction>()(
           winners: [...state.winners, winner]
         }));
       },
-      setRaceHasWinner(raceHasWinner) {
-        set(() => ({ raceHasWinner }));
+      setRaceWinnerId(raceWinnerId) {
+        set(() => ({ raceWinnerId }));
       },
       getWinner(id) {
         const winner = get().winners.find(winner => winner.carId === id);

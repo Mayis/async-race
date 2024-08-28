@@ -5,8 +5,11 @@ import { FailedResponse, SuccessResponse } from "@/api/types";
 export default class GarageSlice extends ApiSlice {
   static baseURL = ApiSlice.baseURL + "/garage";
 
-  static async GetCars() {
-    const rsp = await this.request("/");
+  static async GetCars(page: number = 1, limit: number = 9) {
+    const params = new URLSearchParams();
+    if (page) params.set("_page", page.toString());
+    if (limit) params.set("_limit", limit.toString());
+    const rsp = await this.request(`?${params.toString()}`);
     if (rsp.meta.error) return rsp as FailedResponse;
     const result = {
       ...(rsp as SuccessResponse),

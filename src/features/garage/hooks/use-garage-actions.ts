@@ -3,10 +3,10 @@ import { Callbacks } from "@/common/types";
 import { useCallback } from "react";
 
 export default function useGarageActions() {
-  const createCar = useCallback(async ({ name, color, callbacks }: { name: string; color: string; callbacks: Callbacks }) => {
-    callbacks.beforeAPICall?.();
+  const createCar = useCallback(async ({ name, color, callbacks }: { name: string; color: string; callbacks?: Callbacks }) => {
+    callbacks?.beforeAPICall?.();
     const rsp = await Api.garage.CreateCar({ name, color });
-    callbacks.afterAPICall?.();
+    callbacks?.afterAPICall?.();
     if (rsp.meta.error) {
       return {
         error: rsp.meta.error.message,
