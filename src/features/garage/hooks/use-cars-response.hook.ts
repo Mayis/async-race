@@ -1,0 +1,40 @@
+import Api from "@/api";
+import { Callbacks } from "@/common/types";
+import { useCallback } from "react";
+
+export function useCarsResponse() {
+  const getCarsResponse = useCallback(async ({ callbacks }: { callbacks: Callbacks }) => {
+    callbacks.beforeAPICall?.();
+    const rsp = await Api.garage.GetCars();
+    callbacks.afterAPICall?.();
+    if (rsp.meta.error) {
+      return {
+        error: rsp.meta.error,
+        data: null
+      };
+    }
+    return {
+      error: null,
+      data: rsp.data
+    };
+  }, []);
+
+  const getCarResponse = useCallback(async ({ id, callbacks }: { id: number; callbacks: Callbacks }) => {
+    callbacks.beforeAPICall?.();
+    const rsp = await Api.garage.GetCar({ id });
+    callbacks.afterAPICall?.();
+    if (rsp.meta.error) {
+      return {
+        error: rsp.meta.error,
+        data: null
+      };
+    }
+
+    return {
+      error: null,
+      data: rsp.data
+    };
+  }, []);
+
+  return { getCarsResponse, getCarResponse };
+}
