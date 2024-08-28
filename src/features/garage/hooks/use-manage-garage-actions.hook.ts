@@ -1,5 +1,5 @@
 import useGarageActions from "@/features/garage/hooks/use-garage-actions";
-import useGarageStore from "@/features/garage/store/use-garage-store";
+import useGarageStore from "@/features/store/use-garage-store";
 import { useState } from "react";
 
 export default function useManageGarageActions() {

@@ -1,6 +1,6 @@
+import { EngineResponse } from "@/api/slices/engine/entity";
 import { EngineStatus } from "@/api/slices/engine/types";
 import { Car } from "@/api/slices/garage/entity";
-import { Engine } from "@/api/slices/garage/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -13,7 +13,7 @@ interface GarageStoreAction {
   removeCar: (id: number) => void;
   updateCar: ({ id, car }: { id: number; car: Partial<Car> }) => void;
   createCar: (car: Car) => void;
-  updateCarEngine: (params: { id: number; engine: Engine }) => void;
+  updateCarEngine: (params: { id: number; engine: EngineResponse }) => void;
   updateCarStatus: (params: { id: number; status: EngineStatus }) => void;
   resetCars: () => void;
 }

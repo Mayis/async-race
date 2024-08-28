@@ -1,19 +1,24 @@
 import { EngineStatus } from "@/api/slices/engine/types";
+import { CarCondition } from "@/api/slices/garage/types";
 import useEngineResponse from "@/features/garage/hooks/use-engine-response.hook";
-import useGarageStore from "@/features/garage/store/use-garage-store";
+import useGarageStore from "@/features/store/use-garage-store";
 import { useCallback, useState } from "react";
 
 export function useEngineActions() {
   const { patchCarEngine, patchEngineStatus } = useEngineResponse();
-  const { updateCarEngineInStore, updateCarStatus } = useGarageStore(state => ({
+  const { updateCarEngineInStore, updateCarStatus, updateCar } = useGarageStore(state => ({
     updateCarEngineInStore: state.updateCarEngine,
-    updateCarStatus: state.updateCarStatus
+    updateCarStatus: state.updateCarStatus,
+    updateCar: state.updateCar
   }));
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const updateCarEngine = useCallback(
-    async ({ id, status }: { id: number; status: EngineStatus.started | EngineStatus.stopped }) => {
+    async ({ id, status, reset }: { id: number; status: EngineStatus.started | EngineStatus.stopped; reset?: boolean }) => {
+      if (reset) {
+        updateCar({ id, car: { position: 0, condition: CarCondition.running } });
+      }
       const engineStatusRsp = await patchCarEngine({
         id,
         status,
@@ -24,6 +29,7 @@ export function useEngineActions() {
       }
 
       updateCarEngineInStore({ id, engine: engineStatusRsp.data! });
+
       if (engineStatusRsp.data && status === EngineStatus.started) {
         const engineRsp = await patchEngineStatus({
           id,
@@ -31,6 +37,7 @@ export function useEngineActions() {
         });
         if (engineRsp.error) {
           setError(engineRsp.error.message);
+          updateCar({ id, car: { condition: CarCondition.broken } });
           updateCarStatus({ id, status: EngineStatus.stopped });
         } else {
           updateCarStatus({ id, status: EngineStatus.drive });
@@ -38,7 +45,7 @@ export function useEngineActions() {
       }
     },
 
-    [patchCarEngine, setLoading, setError, updateCarEngineInStore, patchEngineStatus, updateCarStatus]
+    [patchCarEngine, setLoading, setError, updateCarEngineInStore, patchEngineStatus, updateCarStatus, updateCar]
   );
 
   return {
