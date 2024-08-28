@@ -1,6 +1,6 @@
 import React from "react";
 import Track from "@/features/garage/components/race-track/track";
-import CarActions from "@/features/garage/components/car-actions/car-actions";
+import GarageActions from "@/features/garage/components/garage-actions/garage-actions";
 import useCars from "@/features/garage/hooks/use-cars.hook";
 
 function RaceTrack() {
@@ -14,7 +14,7 @@ function RaceTrack() {
     <div>
       {cars.map(car => (
         <Track key={car.id}>
-          <CarActions id={car.id} engineStatus={car.engine.status}>
+          <GarageActions id={car.id} engineStatus={car.engine.status}>
             <div
               style={{
                 backgroundColor: car.color
@@ -22,7 +22,7 @@ function RaceTrack() {
             >
               {car.name}
             </div>
-          </CarActions>
+          </GarageActions>
         </Track>
       ))}
     </div>

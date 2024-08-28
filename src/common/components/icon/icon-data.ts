@@ -7,5 +7,7 @@ export const ICONS = {
   reset: "/icons/reset.svg",
   "start-race": "/icons/start-race.svg",
   delete: "/icons/delete.svg",
-  edit: "/icons/edit.svg"
+  edit: "/icons/edit.svg",
+  start: "/icons/start-single-race.svg",
+  stop: "/icons/stop-race.svg"
 };
