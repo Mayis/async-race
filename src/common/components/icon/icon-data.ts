@@ -5,5 +5,7 @@ export const ICONS = {
   winner: "/icons/winner.svg",
   random: "/icons/random.svg",
   reset: "/icons/reset.svg",
-  "start-race": "/icons/start-race.svg"
+  "start-race": "/icons/start-race.svg",
+  delete: "/icons/delete.svg",
+  edit: "/icons/edit.svg"
 };
