@@ -6,10 +6,11 @@ interface Props {
   icon: IconName;
   onClick?: () => void;
   iconSize?: number;
+  disabled?: boolean;
 }
-function IconButton({ icon, onClick, iconSize }: Props) {
+function IconButton({ icon, onClick, iconSize, disabled }: Props) {
   return (
-    <button onClick={onClick} className="p-2 border border-black rounded-full">
+    <button disabled={disabled} onClick={onClick} className="p-2 border border-black rounded-full">
       <Icon name={icon} size={iconSize} />
     </button>
   );

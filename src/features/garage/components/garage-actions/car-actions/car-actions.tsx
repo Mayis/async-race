@@ -2,6 +2,7 @@ import IconButton from "@/common/components/button/icon-button";
 import Modal from "@/common/components/modal/modal";
 import RemoveCar from "@/features/garage/components/garage-actions/car-actions/remove-car";
 import UpdateCar from "@/features/garage/components/garage-actions/car-actions/update-car";
+import useGarageStore from "@/features/store/use-garage-store";
 import React, { useCallback, useMemo, useState } from "react";
 
 type Modal = "update" | "delete";
@@ -11,6 +12,9 @@ interface Props {
 }
 function CarActions({ id }: Props) {
   const [modalType, setModalType] = useState<Modal | null>(null);
+  const car = useGarageStore(state => state.cars.find(car => car.id === id));
+
+  const disableActions = !car || car.engine.status !== "stopped" || car.position !== 0;
 
   const handleAction = useCallback(
     (type: Modal) => {
@@ -31,8 +35,8 @@ function CarActions({ id }: Props) {
   return (
     <div>
       <div className="flex flex-col space-y-2 items-center">
-        <IconButton iconSize={16} icon="edit" onClick={() => handleAction("update")} />
-        <IconButton iconSize={16} icon="delete" onClick={() => handleAction("delete")} />
+        <IconButton disabled={disableActions} iconSize={16} icon="edit" onClick={() => handleAction("update")} />
+        <IconButton disabled={disableActions} iconSize={16} icon="delete" onClick={() => handleAction("delete")} />
       </div>
       <Modal isOpen={!!modalType}>{modals[modalType!]}</Modal>
     </div>

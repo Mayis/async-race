@@ -16,7 +16,8 @@ function RaceTrack() {
       {cars.map(car => (
         <Track key={car.id}>
           <GarageActions id={car.id} engineStatus={car.engine.status}>
-            <div className="w-full">
+            <div className="w-full relative">
+              <div className="absolute left-[200px] z-10">{car.condition}</div>
               <Car car={car} />
             </div>
           </GarageActions>
