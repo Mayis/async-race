@@ -12,6 +12,7 @@ interface GarageStoreAction {
   setCars: (cars: Car[]) => void;
   removeCar: (id: number) => void;
   updateCar: ({ id, car }: { id: number; car: Partial<Car> }) => void;
+  createCar: (car: Car) => void;
   updateCarEngine: (params: { id: number; engine: Engine }) => void;
   updateCarStatus: (params: { id: number; status: EngineStatus }) => void;
   resetCars: () => void;
@@ -31,6 +32,9 @@ const useGarageStore = create<GarageStoreState & GarageStoreAction>()(
         set(state => ({
           cars: state.cars.map(c => (c.id === id ? { ...c, ...car } : c))
         }));
+      },
+      createCar(car) {
+        set(state => ({ cars: [...state.cars, car] }));
       },
       updateCarEngine({ id, engine }) {
         set(state => ({
