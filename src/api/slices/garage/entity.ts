@@ -25,7 +25,9 @@ export class Car {
 
 export class GetCarsResponse {
   items: Car[];
+  length: number;
   constructor(json: Record<string, unknown>) {
-    this.items = Array.isArray(json.items) ? json.items.map(car => new Car(car)) : [];
+    this.items = Array.isArray(json.data) ? json.data.map(car => new Car(car)) : [];
+    this.length = typeof json.totalCount === "string" ? +json.totalCount : 0;
   }
 }

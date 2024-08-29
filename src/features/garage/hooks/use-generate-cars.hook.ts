@@ -1,3 +1,4 @@
+import useCars from "@/features/garage/hooks/use-cars.hook";
 import useGarageActions from "@/features/garage/hooks/use-garage-actions";
 import { useCallback } from "react";
 
@@ -5,6 +6,7 @@ export default function useGenerateCars() {
   const cars = generateRandomCars();
 
   const { createCar } = useGarageActions();
+  const { reloadOnCreate } = useCars();
   const generateCars = useCallback(async () => {
     const actions = cars.map(car =>
       createCar({
@@ -12,9 +14,14 @@ export default function useGenerateCars() {
         color: car.color
       })
     );
-    await Promise.all(actions);
-    // console.log(data);
-  }, [cars, createCar]);
+
+    const data = await Promise.all(actions);
+    const isThereError = data.some(d => d.error);
+
+    if (!isThereError) {
+      reloadOnCreate();
+    }
+  }, [cars, createCar, reloadOnCreate]);
 
   return { generateCars };
 }

@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 export function useCarsResponse() {
   const getCarsResponse = useCallback(
-    async ({ page, limit, callbacks }: { page?: number; limit: number; callbacks: Callbacks }) => {
+    async ({ page, limit, callbacks }: { page?: number; limit?: number; callbacks: Callbacks }) => {
       callbacks.beforeAPICall?.();
       const rsp = await Api.garage.GetCars(page, limit);
       callbacks.afterAPICall?.();

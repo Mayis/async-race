@@ -4,9 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 
 const limit = 9;
 export default function useCars() {
-  const { cars, setCars } = useGarageStore(state => ({
+  const { cars, setCars, setPagesLength } = useGarageStore(state => ({
     cars: state.cars,
-    setCars: state.setCars
+    setCars: state.setCars,
+    setPagesLength: state.setPagesLength
   }));
   const [hasInitializedStore, setHasInitializedStore] = useState(false);
   const [page, setPage] = useState(1);
@@ -31,13 +32,15 @@ export default function useCars() {
 
       if (rsp.error) {
         setError(rsp.error.message);
+        return;
       }
       setCars({
         ...cars,
         [page!.toString()]: rsp.data!.items
       });
+      setPagesLength(rsp.data!.length);
     },
-    [getCarsResponse, setCars, cars]
+    [getCarsResponse, setCars, cars, setPagesLength]
   );
 
   const reloadOnCreate = useCallback(() => {

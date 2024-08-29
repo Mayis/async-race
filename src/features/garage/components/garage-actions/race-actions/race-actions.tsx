@@ -13,7 +13,7 @@ function RaceActions({ id }: Props) {
   const { setRaceType } = useWinnerStore(state => ({
     setRaceType: state.setRaceType
   }));
-  const raceStart = useCallback(
+  const updateRaceCondition = useCallback(
     async ({
       type,
       status,
@@ -40,7 +40,7 @@ function RaceActions({ id }: Props) {
         iconSize={16}
         icon="start"
         onClick={() =>
-          raceStart({
+          updateRaceCondition({
             type: "single",
             status: EngineStatus.started,
             reset: false
@@ -51,7 +51,7 @@ function RaceActions({ id }: Props) {
         iconSize={16}
         icon="stop"
         onClick={() =>
-          raceStart({
+          updateRaceCondition({
             type: null,
             status: EngineStatus.stopped,
             reset: true

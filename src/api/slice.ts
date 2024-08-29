@@ -42,8 +42,10 @@ export default class ApiSlice {
           data: payload || undefined,
           responseType: "json"
         })) || ({} as ResponseModel<T>);
+
+      const totalCount: number | undefined = rsp.headers["x-total-count"];
       return {
-        data: rsp.data,
+        data: totalCount ? { data: rsp.data, totalCount } : rsp.data,
         meta: {
           error: null,
           status: rsp.status
