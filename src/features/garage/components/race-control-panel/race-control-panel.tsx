@@ -5,32 +5,22 @@ import CreateCar from "@/features/garage/components/garage-actions/car-actions/c
 import useGenerateCars from "@/features/garage/hooks/use-generate-cars.hook";
 import useRace from "@/features/garage/hooks/use-race.hook";
 import useResetCars from "@/features/garage/hooks/use-reset-race.hook";
-import useGarageStore from "@/features/store/use-garage-store";
 
-import useWinnerStore from "@/features/store/use-winner-store";
 import React, { useCallback } from "react";
 
 function RaceControlPanel() {
   const { handleAllCarsEngineActions } = useRace();
-  const { resetCars } = useResetCars();
+  const { resetCars, canReset, raceType } = useResetCars();
   const { generateCars } = useGenerateCars();
   const { value, setTrue, setFalse } = useBoolean();
-  const { setRaceType, raceType } = useWinnerStore(state => ({
-    setRaceType: state.setRaceType,
-    raceType: state.raceType
-  }));
-  const { canReset } = useGarageStore(state => ({
-    canReset: state.cars[state.activePage].some(car => car.position === 0)
-  }));
+
   const startRace = useCallback(async () => {
-    setRaceType("multi");
     await handleAllCarsEngineActions();
-  }, [setRaceType, handleAllCarsEngineActions]);
+  }, [handleAllCarsEngineActions]);
 
   const resetRace = useCallback(async () => {
-    setRaceType(null);
     await resetCars();
-  }, [resetCars, setRaceType]);
+  }, [resetCars]);
 
   return (
     <div className="flex flex-row py-4 items-center px-16">
@@ -41,7 +31,7 @@ function RaceControlPanel() {
           </Button>
         </div>
         <div>
-          <Button onClick={resetRace} disabled={canReset} icon="reset">
+          <Button onClick={resetRace} disabled={!canReset} icon="reset">
             Reset
           </Button>
         </div>

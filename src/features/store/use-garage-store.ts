@@ -7,7 +7,7 @@ import { persist } from "zustand/middleware";
 interface GarageStoreState {
   cars: Record<string, Car[]>;
   activePage: number;
-  pagesLength: number;
+  carsCount: number;
 }
 
 interface GarageStoreAction {
@@ -19,13 +19,13 @@ interface GarageStoreAction {
   updateCarStatus: (params: { id: number; status: EngineStatus }) => void;
   resetCars: () => void;
   getCar: (id: number) => Car | undefined;
-  setPagesLength: (length: number) => void;
+  setCarsCount: (count: number) => void;
 }
 
 const useGarageStore = create<GarageStoreState & GarageStoreAction>()(
   persist(
     (set, get) => ({
-      pagesLength: 1,
+      carsCount: 1,
       activePage: 1,
       cars: { "1": [] },
       setCars(cars) {
@@ -39,8 +39,8 @@ const useGarageStore = create<GarageStoreState & GarageStoreAction>()(
           }
         }));
       },
-      setPagesLength(length) {
-        set(() => ({ pagesLength: length }));
+      setCarsCount(count) {
+        set(() => ({ carsCount: count }));
       },
       updateCar({ id, car }) {
         set(state => ({

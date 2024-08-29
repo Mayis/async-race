@@ -9,19 +9,24 @@ export default function useResetCars() {
     cars: state.cars[state.activePage],
     resetCarsInStore: state.resetCars
   }));
-  const { raceWinnerId, setRaceWinnerId } = useWinnerStore(state => ({
+
+  const canReset = cars.some(car => car.position > 0);
+  const { raceWinnerId, setRaceWinnerId, setRaceType, raceType } = useWinnerStore(state => ({
     raceWinnerId: state.raceWinnerId,
-    setRaceWinnerId: state.setRaceWinnerId
+    setRaceWinnerId: state.setRaceWinnerId,
+    setRaceType: state.setRaceType,
+    raceType: state.raceType
   }));
   const { updateCarEngine } = useEngineActions();
 
   const resetCars = useCallback(async () => {
+    setRaceType(null);
     const actions = cars.map(car => updateCarEngine({ id: car.id, status: EngineStatus.stopped }));
     resetCarsInStore();
     await Promise.all(actions);
     if (raceWinnerId) {
       setRaceWinnerId(null);
     }
-  }, [cars, updateCarEngine, resetCarsInStore, raceWinnerId, setRaceWinnerId]);
-  return { resetCars };
+  }, [cars, updateCarEngine, resetCarsInStore, raceWinnerId, setRaceWinnerId, setRaceType]);
+  return { resetCars, canReset, raceType };
 }

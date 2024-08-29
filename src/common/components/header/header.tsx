@@ -1,8 +1,8 @@
 "use client";
 
+import React from "react";
 import Button from "@/common/components/button/button";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 function Header() {
   const push = useRouter().push;

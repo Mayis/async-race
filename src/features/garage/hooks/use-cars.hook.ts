@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 
 const limit = 9;
 export default function useCars() {
-  const { cars, setCars, setPagesLength, pagesLength, setActivePage } = useGarageStore(state => ({
+  const { cars, setCars, setCarsCount, carsCount, setActivePage } = useGarageStore(state => ({
     cars: state.cars,
     setCars: state.setCars,
-    setPagesLength: state.setPagesLength,
-    pagesLength: state.pagesLength,
+    setCarsCount: state.setCarsCount,
+    carsCount: state.carsCount,
     setActivePage: state.setActivePage
   }));
   const [hasInitializedStore, setHasInitializedStore] = useState(false);
@@ -39,10 +39,10 @@ export default function useCars() {
         ...cars,
         [page!.toString()]: rsp.data!.items
       });
-      setPagesLength(rsp.data!.length);
+      setCarsCount(rsp.data!.length);
       setActivePage(page);
     },
-    [getCarsResponse, setCars, cars, setPagesLength, setActivePage]
+    [getCarsResponse, setCars, cars, setCarsCount, setActivePage]
   );
 
   const reloadOnCreate = useCallback(() => {
@@ -66,7 +66,7 @@ export default function useCars() {
     activePage: page,
     setActivePage: setPage,
     loading,
-    pagesLength,
+    carsCount,
     error,
     reloadOnCreate
   };

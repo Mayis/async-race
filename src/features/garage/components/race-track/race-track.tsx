@@ -9,7 +9,7 @@ import WinnerModal from "@/features/winner/components/modal/winner-modal";
 import IconButton from "@/common/components/button/icon-button";
 
 function RaceTrack() {
-  const { cars, loading, setActivePage, activePage, pagesLength } = useCars();
+  const { cars, loading, setActivePage, activePage, carsCount } = useCars();
   const [showWinner, setShowWinner] = useState(false);
   const { setRaceWinnerId, raceType, raceWinnerId } = useWinnerStore(state => ({
     raceWinnerId: state.raceWinnerId,
@@ -27,7 +27,7 @@ function RaceTrack() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+  const pagesLength = Math.floor(carsCount / 9) + 1;
   return (
     <div className="w-full">
       <div>
@@ -46,19 +46,24 @@ function RaceTrack() {
         </Modal>
       </div>
       {pagesLength > 1 && (
-        <div className="flex flex-row justify-center">
-          <div className="p-4 space-x-6 flex flex-row items-center">
-            <IconButton icon="prev" iconSize={24} onClick={() => setActivePage(activePage - 1 < 1 ? 1 : activePage - 1)} />
-            <div>
-              <h1>
-                {activePage} / {pagesLength}
-              </h1>
+        <div className="p-10">
+          <div className="flex flex-row justify-center">
+            <div className="p-4 space-x-6 flex flex-row items-center">
+              <IconButton icon="prev" iconSize={24} onClick={() => setActivePage(activePage - 1 < 1 ? 1 : activePage - 1)} />
+              <div>
+                <h1>
+                  {activePage} / {pagesLength}
+                </h1>
+              </div>
+              <IconButton
+                icon="next"
+                iconSize={24}
+                onClick={() => setActivePage(activePage + 1 > pagesLength ? pagesLength : activePage + 1)}
+              />
             </div>
-            <IconButton
-              icon="next"
-              iconSize={24}
-              onClick={() => setActivePage(activePage + 1 > pagesLength ? pagesLength : activePage + 1)}
-            />
+          </div>
+          <div className="flex flex-row justify-center">
+            <h1>{carsCount} cars in total</h1>
           </div>
         </div>
       )}

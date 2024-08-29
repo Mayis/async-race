@@ -28,6 +28,6 @@ export class GetCarsResponse {
   length: number;
   constructor(json: Record<string, unknown>) {
     this.items = Array.isArray(json.data) ? json.data.map(car => new Car(car)) : [];
-    this.length = typeof json.totalCount === "string" ? Math.floor(+json.totalCount / 9) : 0;
+    this.length = typeof json.totalCount === "string" ? +json.totalCount : 0;
   }
 }
