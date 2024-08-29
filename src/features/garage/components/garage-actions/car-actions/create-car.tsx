@@ -1,34 +1,29 @@
 import Button from "@/common/components/button/button";
 import ActionsForm from "@/features/garage/components/garage-actions/car-actions/actions-form";
 import useManageGarageActions from "@/features/garage/hooks/use-manage-garage-actions.hook";
-import useGarageStore from "@/features/store/use-garage-store";
 import React, { useCallback, useState } from "react";
 
 interface Props {
-  id: number;
   onClose: () => void;
 }
-function UpdateCar({ id, onClose }: Props) {
-  const car = useGarageStore(state => state.getCar(id));
-  const { updateCarAction, loading } = useManageGarageActions();
+function CreateCar({ onClose }: Props) {
+  const { createCarAction, loading } = useManageGarageActions();
   const [updateValues, setUpdateValues] = useState({
-    name: car?.name || "",
-    color: car?.color || "#000000"
+    name: "",
+    color: "#000000"
   });
 
   const isFieldsFilled = updateValues.name && updateValues.color;
-  const fieldsAreChanged = updateValues.name !== car?.name || updateValues.color !== car?.color;
 
   const submit = useCallback(async () => {
-    if (isFieldsFilled && fieldsAreChanged) {
-      await updateCarAction({
-        id,
+    if (isFieldsFilled) {
+      await createCarAction({
         name: updateValues.name!,
         color: updateValues.color!
       });
     }
     onClose();
-  }, [id, isFieldsFilled, onClose, updateCarAction, updateValues.color, updateValues.name, fieldsAreChanged]);
+  }, [isFieldsFilled, onClose, createCarAction, updateValues.color, updateValues.name]);
 
   return (
     <div className="bg-white p-6 flex-flex-col space-y-4 rounded-2xl">
@@ -45,4 +40,4 @@ function UpdateCar({ id, onClose }: Props) {
   );
 }
 
-export default UpdateCar;
+export default CreateCar;

@@ -1,3 +1,4 @@
+import { EngineStatus } from "@/api/slices/engine/types";
 import IconButton from "@/common/components/button/icon-button";
 import Modal from "@/common/components/modal/modal";
 import RemoveCar from "@/features/garage/components/garage-actions/car-actions/remove-car";
@@ -13,9 +14,7 @@ interface Props {
 function CarActions({ id }: Props) {
   const [modalType, setModalType] = useState<Modal | null>(null);
   const car = useGarageStore(state => state.getCar(id));
-
-  const disableActions = !car || car.engine.status !== "stopped" || car.position !== 0;
-
+  const disableActions = !car || car.engine.status !== EngineStatus.stopped || car.position !== 0;
   const handleAction = useCallback(
     (type: Modal) => {
       if (id) {
@@ -32,6 +31,7 @@ function CarActions({ id }: Props) {
     }),
     [id, setModalType]
   );
+
   return (
     <div>
       <div className="flex flex-col space-y-2 items-center">

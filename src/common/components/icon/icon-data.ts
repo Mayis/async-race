@@ -9,5 +9,8 @@ export const ICONS = {
   delete: "/icons/delete.svg",
   edit: "/icons/edit.svg",
   start: "/icons/start-single-race.svg",
-  stop: "/icons/stop-race.svg"
+  stop: "/icons/stop-race.svg",
+  next: "/icons/next.svg",
+  prev: "/icons/prev.svg",
+  create: "/icons/create.svg"
 };

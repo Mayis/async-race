@@ -4,17 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 
 const limit = 9;
 export default function useCars() {
-  const { cars, setCars, setPagesLength } = useGarageStore(state => ({
+  const { cars, setCars, setPagesLength, pagesLength, setActivePage } = useGarageStore(state => ({
     cars: state.cars,
     setCars: state.setCars,
-    setPagesLength: state.setPagesLength
+    setPagesLength: state.setPagesLength,
+    pagesLength: state.pagesLength,
+    setActivePage: state.setActivePage
   }));
   const [hasInitializedStore, setHasInitializedStore] = useState(false);
-  const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { getCarsResponse } = useCarsResponse();
-
+  const [page, setPage] = useState(1);
   const getCars = useCallback(
     async (page: number = 1) => {
       const rsp = await getCarsResponse({
@@ -39,8 +40,9 @@ export default function useCars() {
         [page!.toString()]: rsp.data!.items
       });
       setPagesLength(rsp.data!.length);
+      setActivePage(page);
     },
-    [getCarsResponse, setCars, cars, setPagesLength]
+    [getCarsResponse, setCars, cars, setPagesLength, setActivePage]
   );
 
   const reloadOnCreate = useCallback(() => {
@@ -51,16 +53,20 @@ export default function useCars() {
     if (!hasInitializedStore && typeof window !== "undefined") {
       setHasInitializedStore(true);
     }
-    if (hasInitializedStore && !cars[page].length) {
+    if (hasInitializedStore && !cars[page]?.length) {
+      // request made
       getCars(page);
+    } else {
+      setActivePage(page);
     }
-  }, [getCars, cars, hasInitializedStore, page]);
+  }, [getCars, cars, hasInitializedStore, page, setActivePage]);
 
   return {
     cars: cars[page] || [],
-    page,
-    changePage: (page: number) => setPage(page),
+    activePage: page,
+    setActivePage: setPage,
     loading,
+    pagesLength,
     error,
     reloadOnCreate
   };
