@@ -1,5 +1,7 @@
 import { EngineStatus } from "@/api/slices/engine/types";
 import { Car as CarEntity } from "@/api/slices/garage/entity";
+import { CarCondition } from "@/api/slices/garage/types";
+import CarIcon from "@/features/garage/components/car/car-icon";
 import useCarAnimation from "@/features/garage/hooks/use-car-animation";
 import useGarageStore from "@/features/store/use-garage-store";
 import { RaceType } from "@/features/store/use-winner-store";
@@ -15,9 +17,11 @@ interface Props {
 
 function Car({ car, winnerId, setWinnerId, raceType }: Props) {
   const { id } = car;
-  const { updateCarPosition, updateCarStatus } = useGarageStore(store => ({
+  const { updateCarPosition, updateCarStatus, carCondition } = useGarageStore(store => ({
     updateCarPosition: store.updateCar,
-    updateCarStatus: store.updateCarStatus
+    updateCarStatus: store.updateCarStatus,
+    carCondition: store.getCar(id)?.condition,
+    updateCarCondition: (condition: CarCondition) => store.updateCar({ id, car: { condition } })
   }));
 
   const { handleWinnerAction } = useWinnerAction();
@@ -39,7 +43,7 @@ function Car({ car, winnerId, setWinnerId, raceType }: Props) {
     }
   };
 
-  const onStop = useCallback(
+  const handlePosition = useCallback(
     (position: number) => {
       updateCarPosition({
         id,
@@ -48,23 +52,19 @@ function Car({ car, winnerId, setWinnerId, raceType }: Props) {
     },
     [updateCarPosition, id]
   );
+
   const { carRef } = useCarAnimation({
     initialPosition: car.position,
     speed: car.engine.velocity,
     status: car.engine.status,
+    condition: carCondition || CarCondition.running,
     onReachTheEnd: carReachTheEnd,
-    onStop
+    handlePosition
   });
 
   return (
-    <div
-      ref={carRef}
-      style={{
-        width: "150px",
-        backgroundColor: car.color
-      }}
-    >
-      {car.name}
+    <div ref={carRef}>
+      <CarIcon color={car.color} />
     </div>
   );
 }

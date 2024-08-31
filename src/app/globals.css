@@ -1,4 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
+
+.neon-border {
+    border: 2px solid #0e79de;
+    box-shadow: 0 0 5px #0e79de, 0 0 10px #0e79de, 0 0 20px #0e79de, 0 0 30px #0e79de;
+    border-radius: 8px;
+  }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .animation-spin {
+    animation: spin 1.5s linear infinite;
+  }

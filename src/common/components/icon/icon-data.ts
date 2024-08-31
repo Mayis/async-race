@@ -12,5 +12,6 @@ export const ICONS = {
   stop: "/icons/stop-race.svg",
   next: "/icons/next.svg",
   prev: "/icons/prev.svg",
-  create: "/icons/create.svg"
+  create: "/icons/create.svg",
+  car: "/icons/car.svg"
 };

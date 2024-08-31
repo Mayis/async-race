@@ -2,15 +2,15 @@ import { EngineStatus } from "@/api/slices/engine/types";
 import { useEngineActions } from "@/features/garage/hooks/use-engine.hook";
 import useGarageStore from "@/features/store/use-garage-store";
 import useWinnerStore from "@/features/store/use-winner-store";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
-export default function useResetCars() {
+export default function useManageRace() {
   const { cars, resetCarsInStore } = useGarageStore(state => ({
     cars: state.cars[state.activePage],
     resetCarsInStore: state.resetCars
   }));
-
-  const canReset = cars.some(car => car.position > 0);
+  const onGoingRace = useRef(false);
+  const canReset = cars.some(car => car.position > 0) && onGoingRace.current;
   const { raceWinnerId, setRaceWinnerId, setRaceType, raceType } = useWinnerStore(state => ({
     raceWinnerId: state.raceWinnerId,
     setRaceWinnerId: state.setRaceWinnerId,
@@ -19,14 +19,23 @@ export default function useResetCars() {
   }));
   const { updateCarEngine } = useEngineActions();
 
+  const handleAllCarsEngineActions = useCallback(async () => {
+    setRaceType("multi");
+    const actions = cars.map(car => updateCarEngine({ id: car.id, status: EngineStatus.started }));
+    await Promise.all(actions);
+    onGoingRace.current = true;
+  }, [cars, updateCarEngine, setRaceType]);
+
   const resetCars = useCallback(async () => {
     setRaceType(null);
     const actions = cars.map(car => updateCarEngine({ id: car.id, status: EngineStatus.stopped }));
     resetCarsInStore();
     await Promise.all(actions);
+    onGoingRace.current = false;
     if (raceWinnerId) {
       setRaceWinnerId(null);
     }
   }, [cars, updateCarEngine, resetCarsInStore, raceWinnerId, setRaceWinnerId, setRaceType]);
-  return { resetCars, canReset, raceType };
+
+  return { handleAllCarsEngineActions, resetCars, canReset, raceType };
 }
