@@ -91,5 +91,5 @@ export default function useWinners() {
     []
   );
 
-  return { getWinnersRsp: getWinners, getWinner, createWinner, deleteWinner, updateWinner };
+  return { getWinners, getWinner, createWinner, deleteWinner, updateWinner };
 }

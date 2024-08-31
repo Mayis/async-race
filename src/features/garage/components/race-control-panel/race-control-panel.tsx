@@ -3,14 +3,12 @@ import Modal from "@/common/components/modal/modal";
 import { useBoolean } from "@/common/hooks/index.hooks";
 import CreateCar from "@/features/garage/components/garage-actions/car-actions/create-car";
 import useGenerateCars from "@/features/garage/hooks/use-generate-cars.hook";
-import useRace from "@/features/garage/hooks/use-race.hook";
-import useResetCars from "@/features/garage/hooks/use-reset-race.hook";
+import useManageRace from "@/features/garage/hooks/use-manage-race.hook";
 
 import React, { useCallback } from "react";
 
 function RaceControlPanel() {
-  const { handleAllCarsEngineActions } = useRace();
-  const { resetCars, canReset, raceType } = useResetCars();
+  const { canReset, handleAllCarsEngineActions, raceType, resetCars } = useManageRace();
   const { generateCars } = useGenerateCars();
   const { value, setTrue, setFalse } = useBoolean();
 

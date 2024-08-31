@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
-import Track from "@/features/garage/components/race-track/track";
 import GarageActions from "@/features/garage/components/garage-actions/garage-actions";
 import useCars from "@/features/garage/hooks/use-cars.hook";
 import Car from "@/features/garage/components/car/car";
 import useWinnerStore from "@/features/store/use-winner-store";
 import Modal from "@/common/components/modal/modal";
 import WinnerModal from "@/features/winner/components/modal/winner-modal";
-import IconButton from "@/common/components/button/icon-button";
+import Pagination from "@/common/components/pagination/pagination";
+import Loading from "@/common/components/loading-indicator/loading";
 
 function RaceTrack() {
   const { cars, loading, setActivePage, activePage, carsCount } = useCars();
@@ -24,48 +24,38 @@ function RaceTrack() {
     },
     [setRaceWinnerId, setShowWinner]
   );
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
   const pagesLength = Math.floor(carsCount / 9) + 1;
   return (
-    <div className="w-full">
-      <div>
-        {cars.map(car => (
-          <Track key={car.id}>
-            <GarageActions id={car.id} engineStatus={car.engine.status}>
-              <div className="w-full relative">
-                <div className="absolute left-[200px] z-10">{car.condition}</div>
-                <Car car={car} setWinnerId={announceWinner} winnerId={raceWinnerId} raceType={raceType} />
+    <div className="px-10">
+      <div className="space-y-2 min-h-[400px] flex flex-col items-center justify-center w-full">
+        {loading ? (
+          <Loading size={60} />
+        ) : (
+          cars.map(car => (
+            <GarageActions key={`track-${car.id}`} id={car.id} engineStatus={car.engine.status}>
+              <div
+                className={`absolute top-1 left-1 p-1 text-[8px] text-white rounded-md ${
+                  car.condition === "running" ? "bg-green-500" : "bg-red-500 animate-blink"
+                }`}
+              >
+                {car.condition}
               </div>
-            </GarageActions>
-          </Track>
-        ))}
-        <Modal isOpen={showWinner}>
-          <WinnerModal id={raceWinnerId!} onClose={() => setShowWinner(false)} />
-        </Modal>
-      </div>
-      {pagesLength > 1 && (
-        <div className="p-10">
-          <div className="flex flex-row justify-center">
-            <div className="p-4 space-x-6 flex flex-row items-center">
-              <IconButton icon="prev" iconSize={24} onClick={() => setActivePage(activePage - 1 < 1 ? 1 : activePage - 1)} />
-              <div>
-                <h1>
-                  {activePage} / {pagesLength}
+              <div className={`absolute top-0 left-0 w-full h-full flex flex-row items-center justify-center`}>
+                <h1 className="text-white font-bold text-6xl opacity-30" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)" }}>
+                  {car.name}
                 </h1>
               </div>
-              <IconButton
-                icon="next"
-                iconSize={24}
-                onClick={() => setActivePage(activePage + 1 > pagesLength ? pagesLength : activePage + 1)}
-              />
-            </div>
-          </div>
-          <div className="flex flex-row justify-center">
-            <h1>{carsCount} cars in total</h1>
-          </div>
-        </div>
+              <Car car={car} setWinnerId={announceWinner} winnerId={raceWinnerId} raceType={raceType} />
+            </GarageActions>
+          ))
+        )}
+      </div>
+      <Modal isOpen={showWinner}>
+        <WinnerModal id={raceWinnerId!} onClose={() => setShowWinner(false)} />
+      </Modal>
+      {pagesLength > 1 && (
+        <Pagination onPageChange={setActivePage} carsCount={carsCount} page={activePage} pagesLength={pagesLength} />
       )}
     </div>
   );

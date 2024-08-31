@@ -29,7 +29,9 @@ const useGarageStore = create<GarageStoreState & GarageStoreAction>()(
       activePage: 1,
       cars: { "1": [] },
       setCars(cars) {
-        set(() => ({ cars }));
+        set(() => ({
+          cars
+        }));
       },
       removeCar(id) {
         set(state => ({

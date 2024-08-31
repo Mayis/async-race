@@ -18,7 +18,14 @@ function Header() {
         </Button>
       </div>
       <div className="flex flex-1 flex-row justify-center">
-        <h1 className="text-[40px]">ASYNC RACE</h1>
+        <h1
+          className="text-6xl font-extrabold text-blue-900 font-roboto"
+          style={{
+            textShadow: "4px 4px 6px rgba(0, 0, 0, 0.8)"
+          }}
+        >
+          ASYNC RACE
+        </h1>
       </div>
     </div>
   );

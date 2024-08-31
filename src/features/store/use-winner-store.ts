@@ -8,12 +8,16 @@ interface WinnerWithCarId extends Winner {
   carId: number;
 }
 interface WinnerStore {
+  allWinners: Record<string, Winner[]>;
+  activePage: number;
   winners: WinnerWithCarId[];
   raceWinnerId: number | null;
   raceType: RaceType | null;
 }
 
 interface WinnerStoreAction {
+  setActivePage: (page: number) => void;
+  setAllWinners: (winners: Record<string, Winner[]>) => void;
   setWinners: (winner: WinnerWithCarId[]) => void;
   createWinner: (winner: WinnerWithCarId) => void;
   updateWinner: ({ id, winner }: { id: number; winner: Partial<Winner> }) => void;
@@ -27,10 +31,22 @@ const useWinnerStore = create<WinnerStore & WinnerStoreAction>()(
   persist(
     (set, get) => ({
       winners: [],
+      activePage: 1,
+      setActivePage(page) {
+        set(() => ({ activePage: page }));
+      },
+      allWinners: {
+        "1": []
+      },
       raceWinnerId: null,
       raceType: null,
       setWinners(winners) {
         set(() => ({ winners }));
+      },
+      setAllWinners(allWinners) {
+        set(() => ({
+          allWinners
+        }));
       },
       setRaceType(raceType) {
         set(() => ({ raceType }));

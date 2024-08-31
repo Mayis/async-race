@@ -6,7 +6,7 @@ import type { FailedResponse, SuccessResponse } from "@/api/types";
 export default class WinnersSlice extends ApiSlice {
   static baseURL = ApiSlice.baseURL + "/winners";
 
-  static async GetWinners({ page, limit, sort, order }: GetWinnersParams) {
+  static async GetWinners({ page, limit = 10, sort, order }: GetWinnersParams) {
     const params = new URLSearchParams();
     if (page) params.append("_page", page.toString());
     if (limit) params.append("_limit", limit.toString());
@@ -14,11 +14,10 @@ export default class WinnersSlice extends ApiSlice {
     if (order) params.append("_order", order);
     const rsp = await this.request(`?${params.toString()}`);
     if (rsp.meta.error) return rsp as FailedResponse;
+
     const result = {
       ...(rsp as SuccessResponse),
-      data: new GetWinnersResponse(
-        (rsp.data && typeof rsp.data === "object" ? { items: rsp.data } : {}) as Record<string, unknown>
-      )
+      data: new GetWinnersResponse((rsp.data && typeof rsp.data === "object" ? rsp.data : {}) as Record<string, unknown>)
     };
     return result;
   }

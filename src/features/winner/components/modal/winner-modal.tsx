@@ -17,7 +17,10 @@ function WinnerModal({ id, onClose }: Props) {
   }));
 
   return (
-    <div className="bg-white rounded-2xl p-4">
+    <div
+      className="relative bg-white rounded-2xl p-6 backdrop-blur-md shadow-neon border-4 border-neon-green"
+      style={{ maxWidth: "400px", margin: "auto" }}
+    >
       <h1>WINNER</h1>
       <p>{car?.name}</p>
       <p>{winner?.time}</p>

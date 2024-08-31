@@ -12,7 +12,9 @@ export class Winner {
 
 export class GetWinnersResponse {
   items: Winner[];
+  length: number;
   constructor(json: Record<string, unknown>) {
-    this.items = Array.isArray(json.items) ? json.items.map(winner => new Winner(winner)) : [];
+    this.items = Array.isArray(json.data) ? json.data.map(winner => new Winner(winner)) : [];
+    this.length = typeof json.totalCount === "string" ? +json.totalCount : 0;
   }
 }
