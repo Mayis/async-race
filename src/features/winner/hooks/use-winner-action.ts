@@ -6,16 +6,15 @@ export default function useWinnerAction() {
   const { createWinner, updateWinner } = useWinners();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { createWinnerInStore, updateWinnerInStore, getWinner } = useWinnerStore(state => ({
-    createWinnerInStore: state.createWinner,
+  const { getWinner, updateWinnerInStore, createWinnerInStore } = useWinnerStore(state => ({
+    getWinner: state.getWinner,
     updateWinnerInStore: state.updateWinner,
-    getWinner: state.getWinner
+    createWinnerInStore: state.createWinner
   }));
 
   const handleWinnerAction = useCallback(
     async ({ id, time }: { id: number; time: number }) => {
       const winner = getWinner(id);
-
       if (winner) {
         const rsp = await updateWinner({
           id: winner.id,
@@ -29,7 +28,7 @@ export default function useWinnerAction() {
         if (rsp.error) {
           setError(rsp.error.message);
         } else {
-          updateWinnerInStore({ id, winner: rsp.data! });
+          updateWinnerInStore(id, rsp.data!);
         }
       } else {
         const rsp = await createWinner({

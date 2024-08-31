@@ -26,13 +26,14 @@ function RaceTrack() {
   );
 
   const pagesLength = Math.floor(carsCount / 9) + 1;
+
   return (
     <div className="px-10">
       <div className="space-y-2 min-h-[400px] flex flex-col items-center justify-center w-full">
         {loading ? (
           <Loading size={60} />
         ) : (
-          cars.map(car => (
+          cars?.map(car => (
             <GarageActions key={`track-${car.id}`} id={car.id} engineStatus={car.engine.status}>
               <div
                 className={`absolute top-1 left-1 p-1 text-[8px] text-white rounded-md ${

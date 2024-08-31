@@ -6,12 +6,13 @@ export default function useWinnersTable() {
   const { getWinners } = useWinners();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
   const [hasInitializedStore, setHasInitializedStore] = useState(false);
-  const { setWinners, winners, setActivePage } = useWinnerStore(state => ({
-    setWinners: state.setAllWinners,
-    winners: state.allWinners,
-    setActivePage: state.setActivePage
+  const { setWinners, winners, setActivePage, winnersCount, activePage } = useWinnerStore(state => ({
+    setWinners: state.setWinners,
+    winners: state.winners,
+    setActivePage: state.setActivePage,
+    winnersCount: state.winnersCount,
+    activePage: state.activePage
   }));
 
   const getWinnersRsp = useCallback(
@@ -27,31 +28,28 @@ export default function useWinnersTable() {
         setError(response.error.message);
         return;
       }
-      setWinners({
-        ...winners,
-        [page.toString()]: response.data!.items
-      });
+      const winnersWithCarId = response.data!.items.map(winner => ({ ...winner, carId: winner.id }));
+      setWinners({ [page]: winnersWithCarId });
       setActivePage(page);
     },
-    [getWinners, setWinners, setActivePage, winners]
+    [getWinners, setWinners, setActivePage, setLoading]
   );
 
   useEffect(() => {
     if (!hasInitializedStore && typeof window !== "undefined") {
       setHasInitializedStore(true);
     }
-    if (hasInitializedStore && !winners[page]?.length) {
-      getWinnersRsp(page);
-    } else {
-      setActivePage(page);
+    if (hasInitializedStore && !winners[activePage]?.length) {
+      getWinnersRsp(activePage);
     }
-  }, [getWinnersRsp, winners, hasInitializedStore, page, setActivePage]);
+  }, [getWinnersRsp, winners, hasInitializedStore, activePage]);
 
   return {
     loading,
     error,
-    winners: winners[page] || [],
-    page,
-    setPage
+    winners: winners[activePage],
+    page: activePage,
+    setPage: setActivePage,
+    winnersCount
   };
 }

@@ -39,7 +39,8 @@ export default function useCarAnimation({
         positionRef.current = newPosition >= roadLength.current ? roadLength.current : newPosition;
 
         if (positionRef.current >= roadLength.current) {
-          onReachTheEnd(positionRef.current, time);
+          const timeInSec = time / divider;
+          onReachTheEnd(positionRef.current, +timeInSec.toFixed(1));
           return;
         }
         if (carRef.current) {

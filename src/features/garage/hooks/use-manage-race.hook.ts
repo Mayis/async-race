@@ -6,11 +6,12 @@ import { useCallback, useRef } from "react";
 
 export default function useManageRace() {
   const { cars, resetCarsInStore } = useGarageStore(state => ({
-    cars: state.cars[state.activePage],
+    cars: state.cars[String(state.activePage)],
     resetCarsInStore: state.resetCars
   }));
-  const onGoingRace = useRef(false);
-  const canReset = cars.some(car => car.position > 0) && onGoingRace.current;
+
+  const onGoingRace = useRef(true);
+  const canReset = cars?.some(car => car.position > 0) && onGoingRace.current;
   const { raceWinnerId, setRaceWinnerId, setRaceType, raceType } = useWinnerStore(state => ({
     raceWinnerId: state.raceWinnerId,
     setRaceWinnerId: state.setRaceWinnerId,

@@ -4,72 +4,68 @@ import { persist } from "zustand/middleware";
 
 export type RaceType = "single" | "multi";
 
-interface WinnerWithCarId extends Winner {
+export interface WinnerWithCarId extends Winner {
   carId: number;
 }
 interface WinnerStore {
-  allWinners: Record<string, Winner[]>;
+  winners: Record<string, WinnerWithCarId[]>;
   activePage: number;
-  winners: WinnerWithCarId[];
   raceWinnerId: number | null;
   raceType: RaceType | null;
+  winnersCount: number;
 }
 
 interface WinnerStoreAction {
   setActivePage: (page: number) => void;
-  setAllWinners: (winners: Record<string, Winner[]>) => void;
-  setWinners: (winner: WinnerWithCarId[]) => void;
-  createWinner: (winner: WinnerWithCarId) => void;
-  updateWinner: ({ id, winner }: { id: number; winner: Partial<Winner> }) => void;
-  removeWinner: (id: number) => void;
+  setWinners: (winners: Record<string, WinnerWithCarId[]>) => void;
   setRaceWinnerId: (id: number | null) => void;
   setRaceType: (raceType: RaceType | null) => void;
+  updateWinner: (id: number, winner: Winner) => void;
+  createWinner: (winner: WinnerWithCarId) => void;
   getWinner: (id: number) => WinnerWithCarId | undefined;
 }
 
 const useWinnerStore = create<WinnerStore & WinnerStoreAction>()(
   persist(
     (set, get) => ({
-      winners: [],
+      winners: { "1": [] },
+      winnersCount: 1,
       activePage: 1,
       setActivePage(page) {
         set(() => ({ activePage: page }));
       },
-      allWinners: {
-        "1": []
-      },
       raceWinnerId: null,
       raceType: null,
       setWinners(winners) {
-        set(() => ({ winners }));
-      },
-      setAllWinners(allWinners) {
         set(() => ({
-          allWinners
+          winners
+        }));
+      },
+      updateWinner(id, winner) {
+        set(state => ({
+          winners: {
+            ...state.winners,
+            [state.activePage]: state.winners[state.activePage].map(w => (w.id === id ? { ...w, ...winner } : w))
+          }
+        }));
+      },
+      createWinner(winner) {
+        set(state => ({
+          winners: {
+            ...state.winners,
+            [state.activePage]: [...state.winners[state.activePage], winner]
+          }
         }));
       },
       setRaceType(raceType) {
         set(() => ({ raceType }));
       },
-      removeWinner(id) {
-        set(state => ({ winners: state.winners.filter(winner => winner.id !== id) }));
-      },
-      updateWinner({ id, winner }) {
-        set(state => ({
-          winners: state.winners.map(w => (w.carId === id ? { ...w, ...winner } : w))
-        }));
-      },
-      createWinner(winner) {
-        set(state => ({
-          winners: [...state.winners, winner]
-        }));
-      },
+
       setRaceWinnerId(raceWinnerId) {
         set(() => ({ raceWinnerId }));
       },
       getWinner(id) {
-        const winner = get().winners.find(winner => winner.carId === id);
-        return winner;
+        return get().winners[get().activePage].find(w => w.id === id);
       }
     }),
     {
