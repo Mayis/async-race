@@ -12,7 +12,7 @@ Checklist
 - Garage section - 90 pts
 - Winner banner - 70 pts
 - Adaptive car animations - 90 pts
-- Winners table - 100 pts
+- Winners table - 60 pts
 
 ## Installation
 
