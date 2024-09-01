@@ -51,6 +51,7 @@ export default class ApiSlice {
           status: rsp.status
         }
       };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // eslint-disable-next-line no-console
       console.log(
