@@ -65,7 +65,7 @@ const useWinnerStore = create<WinnerStore & WinnerStoreAction>()(
         set(() => ({ raceWinnerId }));
       },
       getWinner(id) {
-        return get().winners[get().activePage].find(w => w.id === id);
+        return get().winners[get().activePage].find(w => w.carId === id);
       }
     }),
     {

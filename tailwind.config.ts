@@ -13,6 +13,9 @@ const config: Config = {
         },
         colors: {
           "neon-green": "#39ff14" // Neon green color
+        },
+        textShadow: {
+          custom: "2px 2px 4px rgba(0, 0, 0, 0.6)"
         }
       }
     }

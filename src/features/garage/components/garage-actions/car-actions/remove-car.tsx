@@ -5,12 +5,13 @@ import React, { useCallback } from "react";
 
 interface Props {
   id: number;
-
   onClose: () => void;
 }
 function RemoveCar({ id, onClose }: Props) {
   const { removeCarAction } = useManageGarageActions();
-  const car = useGarageStore(state => state.getCar(id));
+  const { car } = useGarageStore(state => ({
+    car: state.getCar(id)
+  }));
 
   const handleRemoveCar = useCallback(async () => {
     await removeCarAction({ id });

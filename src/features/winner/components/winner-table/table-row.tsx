@@ -6,7 +6,7 @@ interface Props {
   carName: string;
 }
 
-export default function TableRow({ winner, carName }: Props) {
+const TableRow = ({ winner, carName }: Props) => {
   return (
     <tr className="text-center">
       <td className="border border-solid border-[#ccc]">{winner.id}</td>
@@ -15,4 +15,6 @@ export default function TableRow({ winner, carName }: Props) {
       <td className="border border-solid border-[#ccc]">{winner.time}</td>
     </tr>
   );
-}
+};
+
+export default TableRow;

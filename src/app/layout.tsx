@@ -7,7 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ASYNC RACE",
-  description: "Async Race Task"
+  description: "Async Race Task",
+  icons: {
+    icon: "/logo.png"
+  }
 };
 
 export default function RootLayout({

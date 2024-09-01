@@ -17,7 +17,7 @@ function GarageActions({ id, children }: PropsWithChildren<Props>) {
         <RaceActions id={id} />
       </div>
       <div className=" relative w-full h-full flex items-center bg-[#52504f]">
-        <div className="absolute top-1/2 left-0 w-full h-[2px] border-t-2 border-dashed border-white transform -translate-y-1/2"></div>
+        <div className="absolute top-1/2 left-0 w-full h-[2px] border-t-2 border-dashed border-white transform -translate-y-1/2" />
         {children}
       </div>
     </div>

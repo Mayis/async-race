@@ -1,7 +1,7 @@
+import { headValues } from "@/lib/constants";
 import React from "react";
 
-const headValues = ["ID", "Name", "Number of Wins", "Best Time"];
-const TableHead: React.FC = () => {
+const TableHead = () => {
   return (
     <thead>
       <tr>

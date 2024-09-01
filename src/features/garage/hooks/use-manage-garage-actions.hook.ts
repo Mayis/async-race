@@ -70,10 +70,12 @@ export default function useManageGarageActions() {
       setError(rsp.error);
       return;
     }
-    updateCar({
-      id,
-      car: rsp.data!
-    });
+    if (rsp.data) {
+      updateCar({
+        id,
+        car: rsp.data
+      });
+    }
   };
 
   return {

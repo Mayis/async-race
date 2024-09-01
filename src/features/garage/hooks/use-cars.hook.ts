@@ -3,6 +3,7 @@ import useGarageStore from "@/features/store/use-garage-store";
 import { useCallback, useEffect, useState } from "react";
 
 const limit = 9;
+
 export default function useCars() {
   const { cars, setCars, setCarsCount, carsCount, setActivePage, activePage } = useGarageStore(state => ({
     cars: state.cars,
@@ -12,6 +13,7 @@ export default function useCars() {
     setActivePage: state.setActivePage,
     activePage: state.activePage
   }));
+
   const [hasInitializedStore, setHasInitializedStore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,12 +38,14 @@ export default function useCars() {
         setError(rsp.error.message);
         return;
       }
-      setCars({
-        ...cars,
-        [page!.toString()]: rsp.data!.items
-      });
-      setCarsCount(rsp.data!.length);
-      setActivePage(page);
+      if (rsp.data) {
+        setCars({
+          ...cars,
+          [page.toString()]: rsp.data.items
+        });
+        setCarsCount(rsp.data.length);
+        setActivePage(page);
+      }
     },
     [getCarsResponse, setCars, cars, setCarsCount, setActivePage]
   );
@@ -60,6 +64,8 @@ export default function useCars() {
     }
   }, [getCars, cars, hasInitializedStore, activePage]);
 
+  const pagesLength = Math.floor(carsCount / 9) + 1;
+
   return {
     cars: cars[activePage] || [],
     activePage,
@@ -67,6 +73,7 @@ export default function useCars() {
     loading,
     carsCount,
     error,
-    reloadOnCreate
+    reloadOnCreate,
+    pagesLength
   };
 }

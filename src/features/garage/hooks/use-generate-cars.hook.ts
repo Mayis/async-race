@@ -1,5 +1,6 @@
 import useCars from "@/features/garage/hooks/use-cars.hook";
 import useGarageActions from "@/features/garage/hooks/use-garage-actions";
+import { carModels } from "@/lib/constants";
 import { useCallback } from "react";
 
 export default function useGenerateCars() {
@@ -27,22 +28,9 @@ export default function useGenerateCars() {
 }
 
 const getRandomCarName = (): string => {
-  const carModels = [
-    "BMW M5",
-    "BMW X5",
-    "BMW i8",
-    "Mercedes S63",
-    "Mercedes GLA",
-    "Mercedes C300",
-    "Audi A4",
-    "Audi Q7",
-    "Audi R8",
-    "Tesla Model S",
-    "Tesla Model X",
-    "Tesla Model 3"
-  ];
   return carModels[Math.floor(Math.random() * carModels.length)];
 };
+
 const getRandomColor = (): string => {
   const hexChars = "0123456789ABCDEF";
   let color = "#";
