@@ -2,7 +2,7 @@
 
 #https://async-race-gamma.vercel.app/ Live Demo 
 
-## Calculated Score:\_\_\_/580 pts
+## Calculated Score:\_\_\_/540 pts
 
 Checklist
 
