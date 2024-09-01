@@ -2,9 +2,9 @@
 
 #https://async-race-gamma.vercel.app/ Live Demo 
 
-## Calculated Score:
+## Calculated Score:\_\_\_/580 pts
 
-Checklist \_\_\_/580 pts
+Checklist
 
 - Car creation and editing panel - 80 pts
 - Race control panel - 70 pts
